@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.company.mapper.SearchMapper">
+  
+	  <!-- 음식점 리스트 가져오기 -->
+	  <select id="addressList" resultType="com.company.model.AddressVO">
+	  	select *
+	  	from store 
+	  </select>
+	  
+	  <!-- 작가 id 리스트 요청 -->
+	<select id="getstorenameList" resultType="String">
+	
+		select catecode from store where storename like concat ('%', #{keyword}, '%')
+	
+	</select>
+	   	
+    <!-- criteria(검색조건) -->
+	<sql id="criteria">
+		    <if test="keyword != null">
+				where (storename like concat ('%', #{keyword}, '%'))
+		    </if>
+	</sql>
+	
+	<!-- 음식점 검색 -->
+	<select id="getstoresList" resultType="com.company.model.AddressVO">
+	
+			select storename, road, address, category, avg_score
+			from store
+			<include refid="criteria"></include>
+	</select>
+	
+	<!-- 음식점 총 개수 -->
+	<select id="storeGetTotal" resultType="int">
+
+  		select count(*) from store
+  		
+		<include refid="criteria"></include>
+		
+	</select>
+  
+  </mapper>
